@@ -64,10 +64,10 @@ class LinkedList:
             new_node.next = self.head
             self.head = new_node
 
-    def find(self, item):
+    def find(self, matcher):
         node = self.head
         while node:
-            if node.data == item:
+            if matcher(node.data):
                 return node.data
             node = node.next
         return None
