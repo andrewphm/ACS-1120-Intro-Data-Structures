@@ -57,45 +57,38 @@ class HashTable(object):
         return sum(bucket.length() for bucket in self.buckets)
 
     def contains(self, key):
-        """Return True if this hash table contains the given key, or False.
-        Running time: O(l) where l is the number of items in the bucket where the key would be stored.
-        This is because we have to traverse the items in the bucket to find the key."""
+        """Return True if this hash table contains the given key, or False."""
         bucket = self.buckets[self._bucket_index(key)]
-        return bucket.find(lambda item: item[0] == key) is not None
+        for item in bucket.items():
+            if item[0] == key:
+                return True
+        return False
 
     def get(self, key):
-        """Return the value associated with the given key, or raise KeyError.
-        Running time: O(l) where l is the number of items in the bucket where the key would be stored.
-        This is because we have to traverse the items in the bucket to find the key."""
+        """Return the value associated with the given key, or raise KeyError."""
         bucket = self.buckets[self._bucket_index(key)]
-        result = bucket.find(lambda item: item[0] == key)
-        if result is None:
-            raise KeyError(f'Key not found: {key}')
-        else:
-            return result[1]
+        for item in bucket.items():
+            if item[0] == key:
+                return item[1]
+        raise KeyError(f'Key not found: {key}')
 
     def set(self, key, value):
-        """Insert or update the given key with its associated value.
-        Running time: O(l) where l is the number of items in the bucket where the key would be stored.
-        This is because we have to traverse the items in the bucket to find the key."""
+        """Insert or update the given key with its associated value."""
         bucket = self.buckets[self._bucket_index(key)]
-        entry = bucket.find(lambda item: item[0] == key)
-        if entry is None:
-            bucket.append((key, value))
-        else:
-            bucket.delete(entry)
-            bucket.append((key, value))
+        for item in bucket.items():
+            if item[0] == key:
+                bucket.delete(item)
+                break
+        bucket.append((key, value))
 
     def delete(self, key):
-        """Delete the given key from this hash table, or raise KeyError.
-        Running time: O(l) where l is the number of items in the bucket where the key would be stored.
-        This is because we have to traverse the items in the bucket to find the key."""
+        """Delete the given key from this hash table, or raise KeyError."""
         bucket = self.buckets[self._bucket_index(key)]
-        entry = bucket.find(lambda item: item[0] == key)
-        if entry is None:
-            raise KeyError(f'Key not found: {key}')
-        else:
-            bucket.delete(entry)
+        for item in bucket.items():
+            if item[0] == key:
+                bucket.delete(item)
+                return
+        raise KeyError(f'Key not found: {key}')
 
 def test_hash_table():
     ht = HashTable()

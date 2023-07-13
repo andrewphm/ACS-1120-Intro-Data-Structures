@@ -64,13 +64,13 @@ class LinkedList:
             new_node.next = self.head
             self.head = new_node
 
-    def find(self, matcher):
+    def find(self, value):
         node = self.head
-        while node:
-            if matcher(node.data):
-                return node.data
+        while node is not None:
+            if node.data == value:
+                return True
             node = node.next
-        return None
+        return False
 
     def delete(self, item):
         if self.is_empty():
